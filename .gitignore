@@ -1,0 +1,5 @@
+.idea
+/api-gateway/target/
+/budget-service/target/
+/planning-service/target/
+/wedding-service/target/
