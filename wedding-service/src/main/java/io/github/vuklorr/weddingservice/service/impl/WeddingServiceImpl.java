@@ -1,34 +1,65 @@
 package io.github.vuklorr.weddingservice.service.impl;
 
+import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.WeddingResponse;
+import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class WeddingServiceImpl implements WeddingService {
-    private static final Map<Integer, WeddingRepository> WEDDING_REPOSITORY_MAP = new HashMap<>();
+    private final WeddingRepository weddingRepository;
     private static final AtomicInteger WEDDING_ID_HOLDER = new AtomicInteger();
 
-    @Override
-    public void createWedding(WeddingRepository weddingRepository) {
-        final int id = WEDDING_ID_HOLDER.getAndIncrement();
-        weddingRepository.setId(id);
-        WEDDING_REPOSITORY_MAP.put(id, weddingRepository);
+    @Autowired
+    public WeddingServiceImpl(WeddingRepository weddingRepository) {
+        this.weddingRepository = weddingRepository;
     }
 
     @Override
-    public List<WeddingRepository> readAllWedding() {
-        return new ArrayList<>(WEDDING_REPOSITORY_MAP.values());
+    public void createWedding(CreateWeddingRequest createWeddingRequest) {
+        weddingRepository.createWeddingModel(new Wedding(
+                WEDDING_ID_HOLDER.getAndIncrement(),
+                createWeddingRequest.title(),
+                createWeddingRequest.weddingDate(),
+                LocalDateTime.now()
+        ));
     }
 
     @Override
-    public WeddingRepository readWedding(int id) {
-        return WEDDING_REPOSITORY_MAP.get(id);
+    public List<WeddingResponse> readAllWedding() {
+        List<Wedding> weddingList = weddingRepository.readAllWedding();
+        List<WeddingResponse> weddingResponseList = new ArrayList<>();
+
+        for (Wedding wedding : weddingList) {
+            WeddingResponse weddingResponse = getWeddingResponseByWedding(wedding);
+            if (weddingResponse != null) {
+                weddingResponseList.add(weddingResponse);
+            }
+        }
+        return weddingResponseList;
+    }
+
+    @Override
+    public WeddingResponse readWedding(int id) {
+        Wedding wedding = weddingRepository.readWedding(id);
+        return getWeddingResponseByWedding(wedding);
+    }
+
+    private WeddingResponse getWeddingResponseByWedding(Wedding wedding) {
+        return wedding != null
+                ? new WeddingResponse(
+                wedding.getId(),
+                wedding.getTitle(),
+                wedding.getWeddingDate(),
+                wedding.getCreatedAt())
+                : null;
     }
 }

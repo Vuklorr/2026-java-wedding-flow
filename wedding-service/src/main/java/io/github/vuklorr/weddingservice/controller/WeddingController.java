@@ -1,6 +1,7 @@
 package io.github.vuklorr.weddingservice.controller;
 
-import io.github.vuklorr.weddingservice.repository.WeddingRepository;
+import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.service.WeddingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,26 +24,26 @@ public class WeddingController {
     }
 
     @PostMapping(value = "/weddings")
-    public ResponseEntity<?> create(@RequestBody WeddingRepository weddingRepository) {
-        weddingService.createWedding(weddingRepository);
+    public ResponseEntity<?> create(@RequestBody CreateWeddingRequest createWeddingRequest) {
+        weddingService.createWedding(createWeddingRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/weddings")
-    public ResponseEntity<List<WeddingRepository>> readAll() {
-        final List<WeddingRepository> weddingRepositoryList = weddingService.readAllWedding();
+    public ResponseEntity<List<WeddingResponse>> readAll() {
+        final List<WeddingResponse> weddingResponceList = weddingService.readAllWedding();
 
-        return weddingRepositoryList != null
-                ? new ResponseEntity<>(weddingRepositoryList, HttpStatus.OK)
+        return weddingResponceList != null
+                ? new ResponseEntity<>(weddingResponceList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping(value = "/weddings/{id}")
     public ResponseEntity<?> read(@PathVariable(name = "id") int id) {
-        final WeddingRepository weddingRepository = weddingService.readWedding(id);
+        final WeddingResponse weddingResponse = weddingService.readWedding(id);
 
-        return weddingRepository != null
-                ? new ResponseEntity<>(weddingRepository, HttpStatus.OK)
+        return weddingResponse != null
+                ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }

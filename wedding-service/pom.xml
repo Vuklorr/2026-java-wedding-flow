@@ -14,7 +14,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>weddingRepository-service</artifactId>
+    <artifactId>wedding-service</artifactId>
 
     <dependencies>
         <dependency>

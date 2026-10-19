@@ -1,11 +1,12 @@
 package io.github.vuklorr.weddingservice.service;
 
-import io.github.vuklorr.weddingservice.repository.WeddingRepository;
+import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 
 import java.util.List;
 
 public interface WeddingService {
-    void createWedding(WeddingRepository weddingRepository);
-    List<WeddingRepository> readAllWedding();
-    WeddingRepository readWedding(int id);
+    void createWedding(CreateWeddingRequest createWeddingRequest);
+    List<WeddingResponse> readAllWedding();
+    WeddingResponse readWedding(int id);
 }
