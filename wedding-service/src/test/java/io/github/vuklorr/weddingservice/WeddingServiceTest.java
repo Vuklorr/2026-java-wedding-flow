@@ -69,6 +69,6 @@ public class WeddingServiceTest {
         WeddingResponse createWeddingResponse = weddingService.createWedding(createWeddingRequest);
         WeddingResponse weddingResponse = weddingService.readWedding(createWeddingResponse.id() + 1);
 
-        assertNotEquals(createWeddingResponse, weddingResponse);
+        assertNull(weddingResponse);
     }
 }
