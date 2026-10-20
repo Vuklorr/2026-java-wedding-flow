@@ -5,7 +5,6 @@ import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,19 +17,26 @@ public class WeddingServiceImpl implements WeddingService {
     private final WeddingRepository weddingRepository;
     private static final AtomicInteger WEDDING_ID_HOLDER = new AtomicInteger();
 
-    @Autowired
     public WeddingServiceImpl(WeddingRepository weddingRepository) {
         this.weddingRepository = weddingRepository;
     }
 
     @Override
-    public void createWedding(CreateWeddingRequest createWeddingRequest) {
-        weddingRepository.createWeddingModel(new Wedding(
+    public WeddingResponse createWedding(CreateWeddingRequest createWeddingRequest) {
+        Wedding wedding = new Wedding(
                 WEDDING_ID_HOLDER.getAndIncrement(),
                 createWeddingRequest.title(),
                 createWeddingRequest.weddingDate(),
                 LocalDateTime.now()
-        ));
+        );
+        weddingRepository.createWeddingModel(wedding);
+
+        return new WeddingResponse(
+                wedding.getId(),
+                wedding.getTitle(),
+                wedding.getWeddingDate(),
+                wedding.getCreatedAt()
+        );
     }
 
     @Override

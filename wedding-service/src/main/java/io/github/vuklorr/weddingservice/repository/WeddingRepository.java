@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class WeddingRepository {
-    private static final ConcurrentHashMap<Integer, Wedding> WEDDING_REPOSITORY_MAP = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Integer, Wedding> WEDDING_REPOSITORY_MAP = new ConcurrentHashMap<>();
 
     public void createWeddingModel(Wedding wedding) {
         WEDDING_REPOSITORY_MAP.put(wedding.getId(), wedding);
