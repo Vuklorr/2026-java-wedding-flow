@@ -3,3 +3,4 @@
 /budget-service/target/
 /planning-service/target/
 /wedding-service/target/
+wedding-docker/.env
