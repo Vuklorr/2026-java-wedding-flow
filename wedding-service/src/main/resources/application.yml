@@ -1,2 +1,15 @@
 server:
   port: 8081
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/wedding_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: validate
+        dialect: org.hibernate.dialect.PostgreSQLDialect
