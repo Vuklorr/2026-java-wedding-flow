@@ -7,15 +7,13 @@ import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class WeddingServiceImpl implements WeddingService {
     private final WeddingRepository weddingRepository;
-    private static final AtomicInteger WEDDING_ID_HOLDER = new AtomicInteger();
 
     public WeddingServiceImpl(WeddingRepository weddingRepository) {
         this.weddingRepository = weddingRepository;
@@ -23,14 +21,12 @@ public class WeddingServiceImpl implements WeddingService {
 
     @Override
     public WeddingResponse createWedding(CreateWeddingRequest createWeddingRequest) {
-        Wedding wedding = new Wedding(
-                WEDDING_ID_HOLDER.getAndIncrement(),
-                createWeddingRequest.title(),
-                createWeddingRequest.weddingDate(),
-                LocalDateTime.now()
-        );
-        weddingRepository.createWeddingModel(wedding);
+        Wedding wedding = new Wedding();
+        wedding.setTitle(createWeddingRequest.title());
+        wedding.setWeddingDate(createWeddingRequest.weddingDate());
+        wedding.setCreatedAt(Instant.now());
 
+        wedding = weddingRepository.save(wedding);
         return new WeddingResponse(
                 wedding.getId(),
                 wedding.getTitle(),
@@ -41,7 +37,7 @@ public class WeddingServiceImpl implements WeddingService {
 
     @Override
     public List<WeddingResponse> readAllWedding() {
-        List<Wedding> weddingList = weddingRepository.readAllWedding();
+        List<Wedding> weddingList = weddingRepository.findAll();
         List<WeddingResponse> weddingResponseList = new ArrayList<>();
 
         for (Wedding wedding : weddingList) {
@@ -55,7 +51,7 @@ public class WeddingServiceImpl implements WeddingService {
 
     @Override
     public WeddingResponse readWedding(int id) {
-        Wedding wedding = weddingRepository.readWedding(id);
+        Wedding wedding = weddingRepository.findById(id).orElse(null);
         return getWeddingResponseByWedding(wedding);
     }
 

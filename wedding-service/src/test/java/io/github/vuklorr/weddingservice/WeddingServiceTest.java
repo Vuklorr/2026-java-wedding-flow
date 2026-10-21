@@ -2,6 +2,8 @@ package io.github.vuklorr.weddingservice;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
@@ -17,7 +19,7 @@ public class WeddingServiceTest {
     public void createWedding_shouldGenerateIdAndCreatedAt() {
         final String title = "First wedding";
         final LocalDate date = LocalDate.of(2028, 9, 1);
-        WeddingRepository weddingRepository = new WeddingRepository();
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         CreateWeddingRequest createWeddingRequest =
@@ -38,7 +40,7 @@ public class WeddingServiceTest {
     public void shouldGetSuccessWeddingById() {
         final String title = "Second wedding";
         final LocalDate date = LocalDate.of(2030, 10, 11);
-        WeddingRepository weddingRepository = new WeddingRepository();
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         CreateWeddingRequest createWeddingRequest =
@@ -57,7 +59,7 @@ public class WeddingServiceTest {
     public void shouldNotFoundWeddingById() {
         final String title = "Found wedding";
         final LocalDate date = LocalDate.of(2035, 2, 2);
-        WeddingRepository weddingRepository = new WeddingRepository();
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         CreateWeddingRequest createWeddingRequest =
