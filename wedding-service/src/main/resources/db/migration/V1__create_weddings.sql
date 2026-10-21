@@ -1,0 +1,6 @@
+CREATE TABLE weddings (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR NOT NULL,
+    wedding_date DATE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL
+);
