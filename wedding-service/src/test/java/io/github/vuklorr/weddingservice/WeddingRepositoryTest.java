@@ -3,7 +3,6 @@ package io.github.vuklorr.weddingservice;
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
-import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
 import io.github.vuklorr.weddingservice.service.impl.WeddingServiceImpl;
@@ -30,7 +29,7 @@ public class WeddingRepositoryTest {
 
     @Container
     private static final PostgreSQLContainer
-            POSTGRES = new PostgreSQLContainer<>("postgres:15")
+            POSTGRES = new PostgreSQLContainer<>("postgres:17")
             .withDatabaseName("test_wedding_db")
             .withUsername("test")
             .withPassword("test");
@@ -76,20 +75,12 @@ public class WeddingRepositoryTest {
 
     @Test
     public void shouldNotFoundWeddingById() {
-        final String title = "Found wedding";
-        final LocalDate date = LocalDate.of(2035, 2, 2);
+        final int id = 0;
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
-        CreateWeddingRequest createWeddingRequest =
-                new CreateWeddingRequest(
-                        title,
-                        date
-                );
-
-        WeddingResponse createWeddingResponse = weddingService.createWedding(createWeddingRequest);
         weddingRepository.flush();
         entityManager.clear();
-        WeddingResponse weddingResponse = weddingService.readWedding(createWeddingResponse.id() + 1);
+        WeddingResponse weddingResponse = weddingService.readWedding(id);
 
         assertNull(weddingResponse);
     }
