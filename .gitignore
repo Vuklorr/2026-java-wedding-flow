@@ -4,3 +4,4 @@
 /planning-service/target/
 /wedding-service/target/
 wedding-docker/.env
+/wedding-service/wedding-service.iml
