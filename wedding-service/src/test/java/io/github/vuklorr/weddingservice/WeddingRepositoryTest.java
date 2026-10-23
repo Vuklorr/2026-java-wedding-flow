@@ -77,9 +77,6 @@ public class WeddingRepositoryTest {
     public void shouldNotFoundWeddingById() {
         final int id = 0;
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
-
-        weddingRepository.flush();
-        entityManager.clear();
         WeddingResponse weddingResponse = weddingService.readWedding(id);
 
         assertNull(weddingResponse);
