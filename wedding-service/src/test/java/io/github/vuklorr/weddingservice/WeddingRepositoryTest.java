@@ -2,6 +2,7 @@ package io.github.vuklorr.weddingservice;
 
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
@@ -19,6 +20,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -80,5 +82,30 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingResponse = weddingService.readWedding(id);
 
         assertNull(weddingResponse);
+    }
+
+    @Test
+    public void shouldUpdateWeddingDateSuccess() {
+        final String title = "First wedding";
+        final LocalDate date = LocalDate.of(2028, 9, 1);
+        final LocalDate newDate = LocalDate.of(2011, 3, 5);
+        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
+
+        CreateWeddingRequest createWeddingRequest =
+                new CreateWeddingRequest(
+                        title,
+                        date
+                );
+
+        WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
+
+        assertNotNull(weddingResponse.id());
+        weddingRepository.flush();
+        entityManager.clear();
+
+        WeddingResponse weddingActual = weddingService.updateWeddingDate(weddingResponse.id(), new UpdateWeddingDateRequest(newDate));
+
+        assertNotEquals(date, weddingActual.weddingDate());
+        assertEquals(newDate, weddingActual.weddingDate());
     }
 }

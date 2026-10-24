@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
@@ -80,6 +81,43 @@ public class WeddingServiceTest {
                 .thenReturn(Optional.empty());
         WeddingResponse weddingResponse = weddingService.readWedding(id);
 
+        assertNull(weddingResponse);
+    }
+
+    @Test
+    public void shouldUpdateWeddingDateSuccess() {
+        final String title = "wedding";
+        final LocalDate date = LocalDate.of(2030, 10, 11);
+        final LocalDate newDate = LocalDate.of(2035, 2, 15);
+        final int id = 1;
+        final Instant timestamp = Instant.ofEpochSecond(123456789);
+        Wedding wedding = new Wedding(id, title, date, timestamp);
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
+        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
+
+        when(weddingRepository.findById(id))
+                .thenReturn(Optional.of(wedding));
+
+        WeddingResponse weddingResponse = weddingService.updateWeddingDate(wedding.getId(), new UpdateWeddingDateRequest(newDate));
+        WeddingResponse expectedResponse = new WeddingResponse(id, title, newDate, timestamp);
+        assertEquals(expectedResponse, weddingResponse);
+    }
+
+    @Test
+    public void shouldUpdateWeddingDateIsNotFound() {
+        final String title = "wedding";
+        final LocalDate date = LocalDate.of(2030, 10, 11);
+        final LocalDate newDate = LocalDate.of(2034, 1, 5);
+        final int id = 1;
+        final Instant timestamp = Instant.ofEpochSecond(123456789);
+        Wedding wedding = new Wedding(id, title, date, timestamp);
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
+        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
+
+        when(weddingRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        WeddingResponse weddingResponse = weddingService.updateWeddingDate(wedding.getId(), new UpdateWeddingDateRequest(newDate));
         assertNull(weddingResponse);
     }
 }

@@ -1,10 +1,12 @@
 package io.github.vuklorr.weddingservice.service.impl;
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -52,6 +54,19 @@ public class WeddingServiceImpl implements WeddingService {
     @Override
     public WeddingResponse readWedding(int id) {
         Wedding wedding = weddingRepository.findById(id).orElse(null);
+        return getWeddingResponseByWedding(wedding);
+    }
+
+    @Override
+    @Transactional
+    public WeddingResponse updateWeddingDate(int id, UpdateWeddingDateRequest updateWeddingDateRequest) {
+        Wedding wedding = weddingRepository.findById(id).orElse(null);
+
+        if (wedding == null) {
+            return null;
+        }
+
+        wedding.setWeddingDate(updateWeddingDateRequest.weddingDate());
         return getWeddingResponseByWedding(wedding);
     }
 
