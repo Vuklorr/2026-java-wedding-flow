@@ -123,10 +123,11 @@ public class WeddingRepositoryTest {
                 );
 
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
-
         assertNotNull(weddingResponse.id());
         boolean weddingResult = weddingService.deleteWedding(weddingResponse.id());
+        WeddingResponse weddingNotFound = weddingService.readWedding(weddingResponse.id());
         assertTrue(weddingResult);
+        assertNull(weddingNotFound);
     }
 
     @Test

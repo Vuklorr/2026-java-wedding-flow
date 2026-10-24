@@ -4,6 +4,7 @@ package io.github.vuklorr.weddingservice;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
@@ -131,6 +132,8 @@ public class WeddingServiceTest {
                 .thenReturn(Optional.of(wedding));
 
         boolean weddingResult = weddingService.deleteWedding(wedding.getId());
+        verify(weddingRepository).delete(wedding);
+
         assertTrue(weddingResult);
     }
 
