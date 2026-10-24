@@ -1,6 +1,5 @@
 package io.github.vuklorr.weddingservice;
 
-
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
@@ -12,7 +11,10 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -27,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DataJpaTest
 @Testcontainers
+@Import(WeddingServiceImpl.class)
 public class WeddingRepositoryTest {
 
     @Container
@@ -45,6 +48,8 @@ public class WeddingRepositoryTest {
 
     @Autowired
     private WeddingRepository weddingRepository;
+    @Autowired
+    private WeddingService weddingService;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -53,7 +58,6 @@ public class WeddingRepositoryTest {
     public void createAndReadWedding_shouldGenerateIdAndCreatedAt() {
         final String title = "First wedding";
         final LocalDate date = LocalDate.of(2028, 9, 1);
-        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         CreateWeddingRequest createWeddingRequest =
                 new CreateWeddingRequest(
@@ -77,18 +81,17 @@ public class WeddingRepositoryTest {
     @Test
     public void shouldNotFoundWeddingById() {
         final int id = 0;
-        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
         WeddingResponse weddingResponse = weddingService.readWedding(id);
 
         assertNull(weddingResponse);
     }
 
     @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     public void shouldUpdateWeddingDateSuccess() {
         final String title = "First wedding";
         final LocalDate date = LocalDate.of(2028, 9, 1);
         final LocalDate newDate = LocalDate.of(2011, 3, 5);
-        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         CreateWeddingRequest createWeddingRequest =
                 new CreateWeddingRequest(
@@ -99,9 +102,7 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
 
         assertNotNull(weddingResponse.id());
-        saveFlushToDB();
         weddingService.updateWeddingDate(weddingResponse.id(), new UpdateWeddingDateRequest(newDate));
-        saveFlushToDB();
         WeddingResponse weddingActual = weddingService.readWedding(weddingResponse.id());
         assertNotEquals(date, weddingActual.weddingDate());
         assertEquals(newDate, weddingActual.weddingDate());

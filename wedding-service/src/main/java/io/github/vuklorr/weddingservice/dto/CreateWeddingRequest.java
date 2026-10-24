@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public record CreateWeddingRequest(
         @NotBlank(message = "Название свадьбы не может быть пустой")
         String title,
-        @NotNull (message = "Дата свадьбы не может быть пустой")
+        @NotNull (message = "Название свадьбы не может быть пустым")
         LocalDate weddingDate
 ) {
 }
