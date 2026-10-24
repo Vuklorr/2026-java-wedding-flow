@@ -64,8 +64,7 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
 
         assertNotNull(weddingResponse.id());
-        weddingRepository.flush();
-        entityManager.clear();
+        saveFlushToDB();
 
         WeddingResponse weddingActual = weddingService.readWedding(weddingResponse.id());
         assertNotNull(weddingActual.id());
@@ -100,12 +99,16 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
 
         assertNotNull(weddingResponse.id());
-        weddingRepository.flush();
-        entityManager.clear();
-
-        WeddingResponse weddingActual = weddingService.updateWeddingDate(weddingResponse.id(), new UpdateWeddingDateRequest(newDate));
-
+        saveFlushToDB();
+        weddingService.updateWeddingDate(weddingResponse.id(), new UpdateWeddingDateRequest(newDate));
+        saveFlushToDB();
+        WeddingResponse weddingActual = weddingService.readWedding(weddingResponse.id());
         assertNotEquals(date, weddingActual.weddingDate());
         assertEquals(newDate, weddingActual.weddingDate());
+    }
+
+    private void saveFlushToDB() {
+        weddingRepository.flush();
+        entityManager.clear();
     }
 }

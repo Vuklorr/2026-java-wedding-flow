@@ -105,19 +105,15 @@ public class WeddingServiceTest {
 
     @Test
     public void shouldUpdateWeddingDateIsNotFound() {
-        final String title = "wedding";
-        final LocalDate date = LocalDate.of(2030, 10, 11);
         final LocalDate newDate = LocalDate.of(2034, 1, 5);
         final int id = 1;
-        final Instant timestamp = Instant.ofEpochSecond(123456789);
-        Wedding wedding = new Wedding(id, title, date, timestamp);
         WeddingRepository weddingRepository = mock(WeddingRepository.class);
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         when(weddingRepository.findById(id))
                 .thenReturn(Optional.empty());
 
-        WeddingResponse weddingResponse = weddingService.updateWeddingDate(wedding.getId(), new UpdateWeddingDateRequest(newDate));
+        WeddingResponse weddingResponse = weddingService.updateWeddingDate(id, new UpdateWeddingDateRequest(newDate));
         assertNull(weddingResponse);
     }
 }
