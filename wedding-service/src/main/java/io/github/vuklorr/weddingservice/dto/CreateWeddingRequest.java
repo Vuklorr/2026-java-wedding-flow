@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record CreateWeddingRequest(
-        @NotBlank(message = "Название свадьбы не может быть пустой")
+        @NotBlank(message = "Название свадьбы не может быть пустым")
         String title,
-        @NotNull (message = "Название свадьбы не может быть пустым")
+        @NotNull (message = "Дата свадьбы не может быть пустой")
         LocalDate weddingDate
 ) {
 }

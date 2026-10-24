@@ -7,6 +7,7 @@ import io.github.vuklorr.weddingservice.service.WeddingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +58,15 @@ public class WeddingController {
 
         return weddingResponse != null
                 ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping(value = "/weddings/{id}")
+    public ResponseEntity<?> deleteWedding(@PathVariable(name = "id") int id) {
+        final boolean deleteResult = weddingService.deleteWedding(id);
+
+        return deleteResult
+                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 

@@ -70,6 +70,17 @@ public class WeddingServiceImpl implements WeddingService {
         return getWeddingResponseByWedding(wedding);
     }
 
+    @Override
+    @Transactional
+    public boolean deleteWedding(int id) {
+        Wedding wedding = weddingRepository.findById(id).orElse(null);
+        if (wedding == null) {
+            return false;
+        }
+        weddingRepository.delete(wedding);
+        return true;
+    }
+
     private WeddingResponse getWeddingResponseByWedding(Wedding wedding) {
         return wedding != null
                 ? new WeddingResponse(
