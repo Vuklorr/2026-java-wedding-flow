@@ -1,12 +1,14 @@
 package io.github.vuklorr.weddingservice.controller;
 
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
+import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.service.WeddingService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,4 +48,17 @@ public class WeddingController {
                 ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PatchMapping(value = "/weddings/{id}")
+    public ResponseEntity<?> updateWeddingDate(
+            @PathVariable(name = "id") int id,
+            @Valid @RequestBody UpdateWeddingDateRequest updateWeddingDateRequest) {
+        final WeddingResponse weddingResponse = weddingService.updateWeddingDate(id, updateWeddingDateRequest);
+
+        return weddingResponse != null
+                ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+
 }
