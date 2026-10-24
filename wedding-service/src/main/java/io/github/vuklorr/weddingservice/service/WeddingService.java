@@ -11,4 +11,5 @@ public interface WeddingService {
     List<WeddingResponse> readAllWedding();
     WeddingResponse readWedding(int id);
     WeddingResponse updateWeddingDate(int id, UpdateWeddingDateRequest updateWeddingDateRequest);
+    boolean deleteWedding(int id);
 }

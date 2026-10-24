@@ -22,9 +22,11 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DataJpaTest
@@ -106,6 +108,33 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingActual = weddingService.readWedding(weddingResponse.id());
         assertNotEquals(date, weddingActual.weddingDate());
         assertEquals(newDate, weddingActual.weddingDate());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    public void shouldDeleteWeddingSuccess() {
+        final String title = "First wedding";
+        final LocalDate date = LocalDate.of(2028, 9, 1);
+
+        CreateWeddingRequest createWeddingRequest =
+                new CreateWeddingRequest(
+                        title,
+                        date
+                );
+
+        WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
+
+        assertNotNull(weddingResponse.id());
+        boolean weddingResult = weddingService.deleteWedding(weddingResponse.id());
+        assertTrue(weddingResult);
+    }
+
+    @Test
+    public void shouldDeleteWeddingNotFoundId() {
+        final int id = 0;
+        boolean weddingResult = weddingService.deleteWedding(id);
+
+        assertFalse(weddingResult);
     }
 
     private void saveFlushToDB() {

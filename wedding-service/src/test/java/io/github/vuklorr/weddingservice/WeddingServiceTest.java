@@ -116,4 +116,39 @@ public class WeddingServiceTest {
         WeddingResponse weddingResponse = weddingService.updateWeddingDate(id, new UpdateWeddingDateRequest(newDate));
         assertNull(weddingResponse);
     }
+
+    @Test
+    public void shouldDeleteWeddingSuccess() {
+        final String title = "wedding";
+        final LocalDate date = LocalDate.of(2030, 10, 11);
+        final int id = 1;
+        final Instant timestamp = Instant.ofEpochSecond(123456789);
+        Wedding wedding = new Wedding(id, title, date, timestamp);
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
+        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
+
+        when(weddingRepository.findById(id))
+                .thenReturn(Optional.of(wedding));
+
+        boolean weddingResult = weddingService.deleteWedding(wedding.getId());
+        assertTrue(weddingResult);
+    }
+
+    @Test
+    public void shouldDeleteWeddingNotFoundId() {
+        final String title = "wedding";
+        final LocalDate date = LocalDate.of(2030, 10, 11);
+        final int id = 1;
+        final Instant timestamp = Instant.ofEpochSecond(123456789);
+        Wedding wedding = new Wedding(id, title, date, timestamp);
+        WeddingRepository weddingRepository = mock(WeddingRepository.class);
+        WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
+
+        when(weddingRepository.findById(id))
+                .thenReturn(Optional.empty());
+
+        boolean weddingResult = weddingService.deleteWedding(wedding.getId());
+        assertFalse(weddingResult);
+    }
+
 }

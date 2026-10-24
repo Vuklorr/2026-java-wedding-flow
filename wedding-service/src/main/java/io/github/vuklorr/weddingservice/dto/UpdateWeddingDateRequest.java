@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public record UpdateWeddingDateRequest(
-        @NotNull (message = "Название свадьбы не может быть пустым")
+        @NotNull (message = "Дата свадьбы не может быть пустой")
         LocalDate weddingDate
 ) {
 }
