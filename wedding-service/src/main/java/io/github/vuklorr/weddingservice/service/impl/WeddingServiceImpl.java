@@ -3,6 +3,7 @@ package io.github.vuklorr.weddingservice.service.impl;
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
+import io.github.vuklorr.weddingservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
@@ -53,7 +54,7 @@ public class WeddingServiceImpl implements WeddingService {
 
     @Override
     public WeddingResponse readWedding(int id) {
-        Wedding wedding = weddingRepository.findById(id).orElse(null);
+        Wedding wedding = weddingRepository.findById(id).orElseThrow(() -> new WeddingNotFoundException(id));
         return getWeddingResponseByWedding(wedding);
     }
 
