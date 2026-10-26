@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
+import io.github.vuklorr.weddingservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.weddingservice.model.Wedding;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
@@ -74,15 +75,16 @@ public class WeddingServiceTest {
 
     @Test
     public void shouldNotFoundWeddingById() {
-        final int id = 2;
+        final int id = 999;
         WeddingRepository weddingRepository = mock(WeddingRepository.class);
         WeddingService weddingService = new WeddingServiceImpl(weddingRepository);
 
         when(weddingRepository.findById(id))
                 .thenReturn(Optional.empty());
-        WeddingResponse weddingResponse = weddingService.readWedding(id);
-
-        assertNull(weddingResponse);
+        assertThrows(
+                WeddingNotFoundException.class,
+                () -> weddingService.readWedding(id)
+        );
     }
 
     @Test

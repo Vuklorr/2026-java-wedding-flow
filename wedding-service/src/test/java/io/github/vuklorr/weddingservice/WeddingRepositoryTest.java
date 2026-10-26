@@ -3,6 +3,7 @@ package io.github.vuklorr.weddingservice;
 import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
+import io.github.vuklorr.weddingservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.weddingservice.repository.WeddingRepository;
 import io.github.vuklorr.weddingservice.service.WeddingService;
 import io.github.vuklorr.weddingservice.service.impl.WeddingServiceImpl;
@@ -26,6 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -82,10 +84,11 @@ public class WeddingRepositoryTest {
 
     @Test
     public void shouldNotFoundWeddingById() {
-        final int id = 0;
-        WeddingResponse weddingResponse = weddingService.readWedding(id);
-
-        assertNull(weddingResponse);
+        final int id = 999;
+        assertThrows(
+                WeddingNotFoundException.class,
+                () -> weddingService.readWedding(id)
+        );
     }
 
     @Test
@@ -125,9 +128,12 @@ public class WeddingRepositoryTest {
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
         assertNotNull(weddingResponse.id());
         boolean weddingResult = weddingService.deleteWedding(weddingResponse.id());
-        WeddingResponse weddingNotFound = weddingService.readWedding(weddingResponse.id());
+        assertThrows(
+                WeddingNotFoundException.class,
+                () -> weddingService.readWedding(weddingResponse.id())
+        );
+
         assertTrue(weddingResult);
-        assertNull(weddingNotFound);
     }
 
     @Test

@@ -45,9 +45,7 @@ public class WeddingController {
     public ResponseEntity<?> read(@PathVariable(name = "id") int id) {
         final WeddingResponse weddingResponse = weddingService.readWedding(id);
 
-        return weddingResponse != null
-                ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(weddingResponse, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/weddings/{id}")
