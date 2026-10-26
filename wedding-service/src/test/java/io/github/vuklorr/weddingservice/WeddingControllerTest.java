@@ -1,5 +1,6 @@
 package io.github.vuklorr.weddingservice;
 
+import io.github.vuklorr.weddingservice.controller.WeddingController;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.weddingservice.service.WeddingService;
@@ -17,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebMvcTest
+@WebMvcTest(WeddingController.class)
 public class WeddingControllerTest {
 
     @Autowired
@@ -55,10 +56,10 @@ public class WeddingControllerTest {
 
         mockMvc.perform(get("/weddings/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value(id))
-                .andExpect(jsonPath("title").value(title))
-                .andExpect(jsonPath("weddingDate").value(date.toString()))
-                .andExpect(jsonPath("createdAt").value(timestamp.toString()));
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.title").value(title))
+                .andExpect(jsonPath("$.weddingDate").value(date.toString()))
+                .andExpect(jsonPath("$.createdAt").value(timestamp.toString()));
 
     }
 }
