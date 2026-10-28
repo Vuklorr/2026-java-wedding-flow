@@ -23,12 +23,9 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 @DataJpaTest
@@ -127,21 +124,31 @@ public class WeddingRepositoryTest {
 
         WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
         assertNotNull(weddingResponse.id());
-        boolean weddingResult = weddingService.deleteWedding(weddingResponse.id());
+        weddingService.deleteWedding(weddingResponse.id());
         assertThrows(
                 WeddingNotFoundException.class,
                 () -> weddingService.readWedding(weddingResponse.id())
         );
-
-        assertTrue(weddingResult);
     }
 
     @Test
     public void shouldDeleteWeddingNotFoundId() {
         final int id = 0;
-        boolean weddingResult = weddingService.deleteWedding(id);
 
-        assertFalse(weddingResult);
+        assertThrows(
+                WeddingNotFoundException.class,
+                () -> weddingService.deleteWedding(id)
+        );
+    }
+
+    @Test
+    public void shouldUpdateDateWeddingNotFoundId() {
+        final int id = 0;
+        final LocalDate date = LocalDate.of(2028, 9, 1);
+        assertThrows(
+                WeddingNotFoundException.class,
+                () -> weddingService.updateWeddingDate(id, new UpdateWeddingDateRequest(date))
+        );
     }
 
     private void saveFlushToDB() {
