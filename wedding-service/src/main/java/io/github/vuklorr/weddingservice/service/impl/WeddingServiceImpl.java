@@ -61,11 +61,7 @@ public class WeddingServiceImpl implements WeddingService {
     @Override
     @Transactional
     public WeddingResponse updateWeddingDate(int id, UpdateWeddingDateRequest updateWeddingDateRequest) {
-        Wedding wedding = weddingRepository.findById(id).orElse(null);
-
-        if (wedding == null) {
-            return null;
-        }
+        Wedding wedding = weddingRepository.findById(id).orElseThrow(() -> new WeddingNotFoundException(id));
 
         wedding.setWeddingDate(updateWeddingDateRequest.weddingDate());
         return getWeddingResponseByWedding(wedding);
@@ -73,13 +69,9 @@ public class WeddingServiceImpl implements WeddingService {
 
     @Override
     @Transactional
-    public boolean deleteWedding(int id) {
-        Wedding wedding = weddingRepository.findById(id).orElse(null);
-        if (wedding == null) {
-            return false;
-        }
+    public void deleteWedding(int id) {
+        Wedding wedding = weddingRepository.findById(id).orElseThrow(() -> new WeddingNotFoundException(id));
         weddingRepository.delete(wedding);
-        return true;
     }
 
     private WeddingResponse getWeddingResponseByWedding(Wedding wedding) {

@@ -54,18 +54,14 @@ public class WeddingController {
             @Valid @RequestBody UpdateWeddingDateRequest updateWeddingDateRequest) {
         final WeddingResponse weddingResponse = weddingService.updateWeddingDate(id, updateWeddingDateRequest);
 
-        return weddingResponse != null
-                ? new ResponseEntity<>(weddingResponse, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(weddingResponse, HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/weddings/{id}")
     public ResponseEntity<?> deleteWedding(@PathVariable(name = "id") int id) {
-        final boolean deleteResult = weddingService.deleteWedding(id);
+        weddingService.deleteWedding(id);
 
-        return deleteResult
-                ? new ResponseEntity<>(HttpStatus.NO_CONTENT)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
