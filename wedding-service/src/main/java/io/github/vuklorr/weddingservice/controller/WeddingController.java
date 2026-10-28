@@ -29,9 +29,7 @@ public class WeddingController {
     public ResponseEntity<?> create(@Valid @RequestBody CreateWeddingRequest createWeddingRequest) {
         final WeddingResponse weddingResponse = weddingService.createWedding(createWeddingRequest);
 
-        return weddingResponse != null
-                ? new ResponseEntity<>(weddingResponse, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(weddingResponse, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/weddings")
