@@ -1,7 +1,6 @@
 package io.github.vuklorr.weddingservice;
 
 import io.github.vuklorr.weddingservice.controller.WeddingController;
-import io.github.vuklorr.weddingservice.dto.CreateWeddingRequest;
 import io.github.vuklorr.weddingservice.dto.UpdateWeddingDateRequest;
 import io.github.vuklorr.weddingservice.dto.WeddingResponse;
 import io.github.vuklorr.weddingservice.exception.WeddingNotFoundException;
@@ -17,6 +16,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -138,9 +138,10 @@ public class WeddingControllerTest {
     }
 
     @Test
-    void shouldReturn200WhenDeleteWedding() throws Exception {
+    void shouldReturn202WhenDeleteWedding() throws Exception {
         final int id = 0;
         mockMvc.perform(delete("/weddings/{id}", id))
                 .andExpect(status().isNoContent());
+        verify(weddingService).deleteWedding(id);
     }
 }
