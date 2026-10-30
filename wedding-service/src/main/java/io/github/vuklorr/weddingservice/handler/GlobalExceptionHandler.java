@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(error -> Map.of(
                     "field", error.getField(),
-                        "message", Objects.requireNonNull(error.getDefaultMessage())
+                        "message", Objects.toString(error.getDefaultMessage(), "Некорректное значение")
                 ))
                 .toList();
 
