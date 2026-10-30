@@ -30,12 +30,7 @@ public class WeddingServiceImpl implements WeddingService {
         wedding.setCreatedAt(Instant.now());
 
         wedding = weddingRepository.save(wedding);
-        return new WeddingResponse(
-                wedding.getId(),
-                wedding.getTitle(),
-                wedding.getWeddingDate(),
-                wedding.getCreatedAt()
-        );
+        return getWeddingResponseByWedding(wedding);
     }
 
     @Override
