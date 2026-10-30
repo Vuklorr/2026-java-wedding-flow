@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class WeddingServiceImpl implements WeddingService {
@@ -30,26 +30,16 @@ public class WeddingServiceImpl implements WeddingService {
         wedding.setCreatedAt(Instant.now());
 
         wedding = weddingRepository.save(wedding);
-        return new WeddingResponse(
-                wedding.getId(),
-                wedding.getTitle(),
-                wedding.getWeddingDate(),
-                wedding.getCreatedAt()
-        );
+        return getWeddingResponseByWedding(wedding);
     }
 
     @Override
     public List<WeddingResponse> readAllWedding() {
-        List<Wedding> weddingList = weddingRepository.findAll();
-        List<WeddingResponse> weddingResponseList = new ArrayList<>();
-
-        for (Wedding wedding : weddingList) {
-            WeddingResponse weddingResponse = getWeddingResponseByWedding(wedding);
-            if (weddingResponse != null) {
-                weddingResponseList.add(weddingResponse);
-            }
-        }
-        return weddingResponseList;
+        return weddingRepository
+                .findAll()
+                .stream()
+                .map(this::getWeddingResponseByWedding)
+                .toList();
     }
 
     @Override
@@ -75,12 +65,10 @@ public class WeddingServiceImpl implements WeddingService {
     }
 
     private WeddingResponse getWeddingResponseByWedding(Wedding wedding) {
-        return wedding != null
-                ? new WeddingResponse(
+        return new WeddingResponse(
                 wedding.getId(),
                 wedding.getTitle(),
                 wedding.getWeddingDate(),
-                wedding.getCreatedAt())
-                : null;
+                wedding.getCreatedAt());
     }
 }
