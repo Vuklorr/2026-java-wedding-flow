@@ -9,11 +9,9 @@ import io.github.vuklorr.weddingservice.service.WeddingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -142,7 +140,7 @@ public class WeddingControllerTest {
     }
 
     @Test
-    void shouldReturn202WhenDeleteWedding() throws Exception {
+    void shouldReturn204WhenDeleteWedding() throws Exception {
         final int id = 0;
         mockMvc.perform(delete("/weddings/{id}", id))
                 .andExpect(status().isNoContent());
@@ -150,7 +148,7 @@ public class WeddingControllerTest {
     }
 
     @Test
-    void shouldReturn200WhenCreateWedding() throws Exception {
+    void shouldReturn201WhenCreateWedding() throws Exception {
         final int id = 0;
         final String title = "Second wedding";
         final LocalDate date = LocalDate.of(2035, 1, 22);
@@ -235,14 +233,16 @@ public class WeddingControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.detail")
-                        .value("Неверно переданы данные в теле запроса"));
+                        .value("Некорректные данные запроса"))
+                .andExpect(jsonPath("$.errors[0].field")
+                        .value("weddingDate"));
 
     }
 
     @Test
     void shouldReturn400WhenWeddingDateIsNull() throws Exception {
         mockMvc.perform(
-                        patch("/weddings")
+                        patch("/weddings/{id}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                         {
@@ -260,7 +260,7 @@ public class WeddingControllerTest {
     @Test
     void shouldReturn400WhenWeddingDateIsIncorrect() throws Exception {
         mockMvc.perform(
-                        patch("/weddings")
+                        patch("/weddings/{id}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                         {

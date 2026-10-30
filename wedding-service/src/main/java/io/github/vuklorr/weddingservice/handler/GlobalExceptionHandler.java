@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -29,12 +30,16 @@ public class GlobalExceptionHandler {
                 "Некорректные данные запроса"
         );
 
-        problemDetail.setProperty("error", List.of(
-                Map.of(
-                        "field", "title",
-                        "message", "Название свадьбы не может быть пустым"
-                )
-        ));
+        List<Map<String, String>> errors = exception.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> Map.of(
+                    "field", error.getField(),
+                        "message", Objects.requireNonNull(error.getDefaultMessage())
+                ))
+                .toList();
+
+        problemDetail.setProperty("errors", errors);
         return problemDetail;
     }
 
