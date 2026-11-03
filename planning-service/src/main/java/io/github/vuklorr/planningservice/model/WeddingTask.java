@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -29,22 +31,42 @@ public class WeddingTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
     @Column(name = "wedding_id", nullable = false)
     private int weddingId;
+
     @Column(name = "name", nullable = false)
     private String name;
+
     @Column(name = "description")
     private String description;
+
     @Column(name = "priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskPriority priority = TaskPriority.MEDIUM;
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private TaskStatus status = TaskStatus.NEW;
+
     @Column(name = "deadline")
     private LocalDate deadline;
-    @Column(name = "created_at", nullable = false)
+
+    @Generated(event = EventType.INSERT)
+    @Column(
+            name = "created_at",
+            nullable = false,
+            insertable = false,
+            updatable = false
+    )
     private Instant createdAt;
-    @Column(name = "updated_at", nullable = false)
+
+    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Column(
+            name = "updated_at",
+            nullable = false,
+            insertable = false,
+            updatable = false
+    )
     private Instant updatedAt;
 }

@@ -8,8 +8,6 @@ import io.github.vuklorr.planningservice.repository.WeddingTaskRepository;
 import io.github.vuklorr.planningservice.service.WeddingTaskService;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 @Service
 public class WeddingTaskServiceImpl implements WeddingTaskService {
 
@@ -24,8 +22,6 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
         WeddingTask weddingTask = new WeddingTask();
         weddingTask.setWeddingId(createWeddingTaskRequest.weddingID());
         weddingTask.setName(createWeddingTaskRequest.name());
-        weddingTask.setCreatedAt(Instant.now());
-        weddingTask.setUpdatedAt(Instant.now());
 
         return getWeddingTaskResponse(weddingTaskRepository.save(weddingTask));
     }
