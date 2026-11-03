@@ -4,6 +4,8 @@ import io.github.vuklorr.planningservice.entity.TaskPriority;
 import io.github.vuklorr.planningservice.entity.TaskStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,7 +28,7 @@ public class WeddingTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Column(name = "wedding_id", nullable = false)
     private int weddingId;
     @Column(name = "name", nullable = false)
@@ -34,13 +36,15 @@ public class WeddingTask {
     @Column(name = "description")
     private String description;
     @Column(name = "priority", nullable = false)
-    private TaskPriority priority;
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority = TaskPriority.MEDIUM;
     @Column(name = "status", nullable = false)
-    private TaskStatus status;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status = TaskStatus.NEW;
     @Column(name = "deadline")
     private LocalDate deadline;
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
     @Column(name = "updated_at", nullable = false)
-    private Instant updated_at;
+    private Instant updatedAt;
 }
