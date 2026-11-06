@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:55432/wedding_db
+    url: jdbc:postgresql://localhost:56000/wedding_db
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 

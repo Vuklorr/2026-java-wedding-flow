@@ -1,0 +1,13 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:56001/planning_db
+    username: ${POSTGRES_PLANNING_USER}
+    password: ${POSTGRES_PLANNING_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
