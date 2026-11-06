@@ -4,6 +4,7 @@ import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
 import io.github.vuklorr.planningservice.entity.TaskPriority;
 import io.github.vuklorr.planningservice.entity.TaskStatus;
+import io.github.vuklorr.planningservice.exception.WeddingTaskNotFoundException;
 import io.github.vuklorr.planningservice.repository.WeddingTaskRepository;
 import io.github.vuklorr.planningservice.service.WeddingTaskService;
 import io.github.vuklorr.planningservice.service.impl.WeddingTaskServiceImpl;
@@ -18,9 +19,11 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @DataJpaTest
@@ -51,24 +54,27 @@ public class WeddingTaskRepositoryTest {
     private EntityManager entityManager;
 
     @Test
-    public void createAndReadWedding_shouldGenerateIdAndCreatedAt() {
+    public void createAndReadWeddingTaskWithEmptyFields() {
         final int idWedding = 1;
         final String name = "First task";
 
         CreateWeddingTaskRequest createWeddingRequest =
                 new CreateWeddingTaskRequest(
-                        idWedding,
-                        name
+                        name,
+                        null,
+                        TaskPriority.MEDIUM,
+                        TaskStatus.NEW,
+                        null
                 );
 
-        WeddingTaskResponse weddingTaskResponse = weddingTaskService.createWeddingTask(createWeddingRequest);
+        WeddingTaskResponse weddingTaskResponse = weddingTaskService.createWeddingTask(createWeddingRequest, idWedding);
 
         assertNotNull(weddingTaskResponse.id());
         saveFlushToDB();
 
         WeddingTaskResponse weddingTaskActual = weddingTaskService.readWeddingTask(weddingTaskResponse.id());
         assertNotNull(weddingTaskActual.id());
-        assertEquals(idWedding, weddingTaskActual.weddingID());
+        assertEquals(idWedding, weddingTaskActual.weddingId());
         assertEquals(name, weddingTaskActual.name());
         assertNull(weddingTaskActual.description());
         assertEquals(TaskPriority.MEDIUM, weddingTaskActual.priority());
@@ -77,6 +83,15 @@ public class WeddingTaskRepositoryTest {
         assertNotNull(weddingTaskActual.createdAt());
         assertNotNull(weddingTaskActual.updateAt());
         assertEquals(weddingTaskActual.createdAt(), weddingTaskActual.updateAt());
+    }
+
+    @Test
+    public void shouldNotFoundWeddingTaskById() {
+        final int id = 999;
+        assertThrows(
+                WeddingTaskNotFoundException.class,
+                () -> weddingTaskService.readWeddingTask(id)
+        );
     }
 
 

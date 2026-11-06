@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public record WeddingTaskResponse (
         Integer id,
-        Integer weddingID,
+        Integer weddingId,
         String name,
         String description,
         TaskPriority priority,

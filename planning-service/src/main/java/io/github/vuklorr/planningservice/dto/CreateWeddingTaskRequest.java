@@ -1,12 +1,17 @@
 package io.github.vuklorr.planningservice.dto;
 
+import io.github.vuklorr.planningservice.entity.TaskPriority;
+import io.github.vuklorr.planningservice.entity.TaskStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+
+import java.time.LocalDate;
 
 public record CreateWeddingTaskRequest(
-        @NotNull (message = "ID свадьбы не может быть пустым")
-        Integer weddingID,
         @NotBlank(message = "Название задачи не может быть пустым")
-        String name
+        String name,
+        String description,
+        TaskPriority priority,
+        TaskStatus status,
+        LocalDate deadline
 ) {
 }
