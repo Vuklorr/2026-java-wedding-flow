@@ -1,5 +1,6 @@
 package io.github.vuklorr.planningservice;
 
+import io.github.vuklorr.planningservice.client.WeddingClient;
 import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
 import io.github.vuklorr.planningservice.entity.TaskPriority;
@@ -17,6 +18,7 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -52,6 +54,9 @@ class WeddingTaskRepositoryTest {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @MockitoBean
+    private WeddingClient weddingClient;
 
     @Test
     void createAndReadTaskShouldPersistEnumsAndGenerateTimestamps() {

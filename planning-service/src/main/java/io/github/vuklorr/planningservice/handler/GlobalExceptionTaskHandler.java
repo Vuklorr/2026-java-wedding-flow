@@ -53,7 +53,7 @@ public class GlobalExceptionTaskHandler {
         );
     }
 
-    @ExceptionHandler(WeddingTaskNotFoundException.class)
+    @ExceptionHandler(WeddingNotFoundException.class)
     public ProblemDetail handleWeddingNotFoundException (WeddingNotFoundException exception) {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
