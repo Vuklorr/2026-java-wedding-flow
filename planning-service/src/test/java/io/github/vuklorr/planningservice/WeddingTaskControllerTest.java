@@ -248,6 +248,19 @@ class WeddingTaskControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void patchWithBlankNameShouldReturn400() throws Exception {
+        mockMvc.perform(patch("/tasks/{id}", 12)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"name": "   "}
+                            """))
+                .andExpect(status().isBadRequest());
+
+        verifyNoInteractions(service);
+    }
+
+
     private static final Instant TIME = Instant.parse("2026-11-01T12:00:00Z");
 
     private static WeddingTaskResponse response(int id, int weddingId, String name) {

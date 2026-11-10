@@ -77,6 +77,7 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
             weddingTask.setDeadline(updateWeddingTaskRequest.deadline());
         }
 
+        weddingTaskRepository.flush();
         return getWeddingTaskResponse(weddingTask);
     }
 

@@ -70,8 +70,8 @@ class WeddingTaskRepositoryTest {
         assertEquals(TaskStatus.NEW, loaded.status());
         assertEquals(LocalDate.of(2027, 7, 15), loaded.deadline());
         assertNotNull(loaded.createdAt());
-        assertNotNull(loaded.updateAt());
-        assertEquals(loaded.createdAt(), loaded.updateAt());
+        assertNotNull(loaded.updatedAt());
+        assertEquals(loaded.createdAt(), loaded.updatedAt());
     }
 
     @Test

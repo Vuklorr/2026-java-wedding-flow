@@ -15,6 +15,6 @@ public record WeddingTaskResponse (
         TaskStatus status,
         LocalDate deadline,
         Instant createdAt,
-        Instant updateAt
+        Instant updatedAt
 ) {
 }
