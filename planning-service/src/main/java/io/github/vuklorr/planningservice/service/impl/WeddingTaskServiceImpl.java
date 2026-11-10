@@ -1,5 +1,6 @@
 package io.github.vuklorr.planningservice.service.impl;
 
+import io.github.vuklorr.planningservice.client.WeddingClient;
 import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.UpdateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
@@ -19,13 +20,17 @@ import java.util.Objects;
 public class WeddingTaskServiceImpl implements WeddingTaskService {
 
     private final WeddingTaskRepository weddingTaskRepository;
+    private final WeddingClient weddingClient;
 
-    public WeddingTaskServiceImpl(WeddingTaskRepository weddingTaskRepository) {
+    public WeddingTaskServiceImpl(WeddingTaskRepository weddingTaskRepository, WeddingClient weddingClient) {
         this.weddingTaskRepository = weddingTaskRepository;
+        this.weddingClient = weddingClient;
     }
 
     @Override
     public WeddingTaskResponse createWeddingTask(CreateWeddingTaskRequest createWeddingTaskRequest, int idWedding) {
+        weddingClient.ensureWeddingExists(idWedding);
+
         WeddingTask weddingTask = new WeddingTask();
         weddingTask.setWeddingId(idWedding);
         weddingTask.setName(createWeddingTaskRequest.name());

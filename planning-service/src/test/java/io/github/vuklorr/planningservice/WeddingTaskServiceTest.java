@@ -1,5 +1,6 @@
 package io.github.vuklorr.planningservice;
 
+import io.github.vuklorr.planningservice.client.WeddingClient;
 import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.UpdateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
@@ -25,11 +26,13 @@ class WeddingTaskServiceTest {
 
     private WeddingTaskRepository repository;
     private WeddingTaskServiceImpl service;
+    private WeddingClient client;
 
     @BeforeEach
     void setUp() {
         repository = mock(WeddingTaskRepository.class);
-        service = new WeddingTaskServiceImpl(repository);
+        client = mock(WeddingClient.class);
+        service = new WeddingTaskServiceImpl(repository, client);
     }
 
     @Test

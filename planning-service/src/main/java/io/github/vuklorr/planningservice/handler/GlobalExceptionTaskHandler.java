@@ -1,5 +1,7 @@
 package io.github.vuklorr.planningservice.handler;
 
+import io.github.vuklorr.planningservice.exception.WeddingNotFoundException;
+import io.github.vuklorr.planningservice.exception.WeddingServiceUnavailableException;
 import io.github.vuklorr.planningservice.exception.WeddingTaskNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -48,6 +50,22 @@ public class GlobalExceptionTaskHandler {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST,
                 "Неверно переданы данные в теле запроса"
+        );
+    }
+
+    @ExceptionHandler(WeddingTaskNotFoundException.class)
+    public ProblemDetail handleWeddingNotFoundException (WeddingNotFoundException exception) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.NOT_FOUND,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(WeddingServiceUnavailableException.class)
+    public ProblemDetail handleWeddingServiceUnavailableException (WeddingServiceUnavailableException exception) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.SERVICE_UNAVAILABLE,
+                exception.getMessage()
         );
     }
 
