@@ -1,7 +1,10 @@
 package io.github.vuklorr.planningservice.service.impl;
 
 import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
+import io.github.vuklorr.planningservice.dto.UpdateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
+import io.github.vuklorr.planningservice.entity.TaskPriority;
+import io.github.vuklorr.planningservice.entity.TaskStatus;
 import io.github.vuklorr.planningservice.exception.WeddingTaskNotFoundException;
 import io.github.vuklorr.planningservice.model.WeddingTask;
 import io.github.vuklorr.planningservice.repository.WeddingTaskRepository;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class WeddingTaskServiceImpl implements WeddingTaskService {
@@ -26,8 +30,8 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
         weddingTask.setWeddingId(idWedding);
         weddingTask.setName(createWeddingTaskRequest.name());
         weddingTask.setDescription(createWeddingTaskRequest.description());
-        weddingTask.setPriority(createWeddingTaskRequest.priority());
-        weddingTask.setStatus(createWeddingTaskRequest.status());
+        weddingTask.setPriority(Objects.requireNonNullElse(createWeddingTaskRequest.priority(), TaskPriority.MEDIUM));
+        weddingTask.setStatus(TaskStatus.NEW);
         weddingTask.setDeadline(createWeddingTaskRequest.deadline());
 
         return getWeddingTaskResponse(weddingTaskRepository.save(weddingTask));
@@ -36,7 +40,7 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
     @Override
     public List<WeddingTaskResponse> readAllWeddingTasksByWeddingId(int weddingId) {
         return weddingTaskRepository
-                .findAll()
+                .findByWeddingId(weddingId)
                 .stream()
                 .map(this::getWeddingTaskResponse)
                 .toList();
@@ -50,13 +54,28 @@ public class WeddingTaskServiceImpl implements WeddingTaskService {
 
     @Override
     @Transactional
-    public WeddingTaskResponse updateWeddingTask(int id, CreateWeddingTaskRequest createWeddingTaskRequest) {
+    public WeddingTaskResponse updateWeddingTask(int id, UpdateWeddingTaskRequest updateWeddingTaskRequest) {
         WeddingTask weddingTask = weddingTaskRepository.findById(id).orElseThrow(() -> new WeddingTaskNotFoundException(id));
-        weddingTask.setName(createWeddingTaskRequest.name());
-        weddingTask.setDescription(createWeddingTaskRequest.description());
-        weddingTask.setPriority(createWeddingTaskRequest.priority());
-        weddingTask.setStatus(createWeddingTaskRequest.status());
-        weddingTask.setDeadline(createWeddingTaskRequest.deadline());
+
+        if (!Objects.isNull(updateWeddingTaskRequest.name())) {
+            weddingTask.setName(updateWeddingTaskRequest.name());
+        }
+
+        if (!Objects.isNull(updateWeddingTaskRequest.description())) {
+            weddingTask.setDescription(updateWeddingTaskRequest.description());
+        }
+
+        if (!Objects.isNull(updateWeddingTaskRequest.priority())) {
+            weddingTask.setPriority(updateWeddingTaskRequest.priority());
+        }
+
+        if (!Objects.isNull(updateWeddingTaskRequest.status())) {
+            weddingTask.setStatus(updateWeddingTaskRequest.status());
+        }
+
+        if (!Objects.isNull(updateWeddingTaskRequest.deadline())) {
+            weddingTask.setDeadline(updateWeddingTaskRequest.deadline());
+        }
 
         return getWeddingTaskResponse(weddingTask);
     }

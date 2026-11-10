@@ -1,6 +1,7 @@
 package io.github.vuklorr.planningservice.controller;
 
 import io.github.vuklorr.planningservice.dto.CreateWeddingTaskRequest;
+import io.github.vuklorr.planningservice.dto.UpdateWeddingTaskRequest;
 import io.github.vuklorr.planningservice.dto.WeddingTaskResponse;
 import io.github.vuklorr.planningservice.service.WeddingTaskService;
 import jakarta.validation.Valid;
@@ -50,8 +51,8 @@ public class WeddingTaskController {
     @PatchMapping(value = "/tasks/{id}")
     public ResponseEntity<?> updateWeddingTask(
             @PathVariable(name = "id") int id,
-            @Valid @RequestBody CreateWeddingTaskRequest createWeddingTaskRequest) {
-        final WeddingTaskResponse weddingTaskResponse = weddingTaskService.updateWeddingTask(id, createWeddingTaskRequest);
+            @Valid @RequestBody UpdateWeddingTaskRequest updateWeddingTaskRequest) {
+        final WeddingTaskResponse weddingTaskResponse = weddingTaskService.updateWeddingTask(id, updateWeddingTaskRequest);
 
         return new ResponseEntity<>(weddingTaskResponse, HttpStatus.OK);
     }
