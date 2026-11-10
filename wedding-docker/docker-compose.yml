@@ -1,5 +1,5 @@
 services:
-  db:
+  db_wedding:
     image: postgres:17
     restart: always
     environment:
@@ -7,8 +7,21 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "127.0.0.1:55432:5432"
+      - "127.0.0.1:56000:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - wedding_data:/var/lib/postgresql/data
+
+  db_planning:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_PLANNING_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PLANNING_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_PLANNING_DB}
+    ports:
+      - "127.0.0.1:56001:5432"
+    volumes:
+      - planning_data:/var/lib/postgresql/data
 volumes:
-  postgres_data:
+  wedding_data:
+  planning_data:

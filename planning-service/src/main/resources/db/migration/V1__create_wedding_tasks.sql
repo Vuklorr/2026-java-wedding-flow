@@ -1,0 +1,11 @@
+CREATE TABLE wedding_tasks (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    wedding_id INTEGER NOT NULL,
+    name VARCHAR NOT NULL,
+    description VARCHAR,
+    priority VARCHAR NOT NULL DEFAULT 'MEDIUM',
+    status VARCHAR NOT NULL DEFAULT 'NEW',
+    deadline DATE NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT now() NOT NULL
+);
