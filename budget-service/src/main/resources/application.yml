@@ -1,0 +1,13 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:56002/budget_db
+    username: ${POSTGRES_BUDGET_USER}
+    password: ${POSTGRES_BUDGET_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
