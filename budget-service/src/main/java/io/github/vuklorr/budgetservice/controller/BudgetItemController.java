@@ -26,7 +26,7 @@ public class BudgetItemController {
     }
 
     @PostMapping(value = "/weddings/{weddingId}/budget/items")
-    public ResponseEntity<?> createBudgetItem(
+    public ResponseEntity<BudgetItemResponse> createBudgetItem(
             @PathVariable(name = "weddingId") int weddingId,
             @Valid @RequestBody CreateBudgetItemRequest createBudgetItemRequest
 
@@ -43,14 +43,14 @@ public class BudgetItemController {
     }
 
     @GetMapping(value = "/budget/items/{itemId}")
-    public ResponseEntity<?> readItem(@PathVariable(name = "itemId") int id) {
+    public ResponseEntity<BudgetItemResponse> readItem(@PathVariable(name = "itemId") int id) {
         final BudgetItemResponse budgetItemResponse = budgetItemService.readBudgetItemById(id);
 
         return new ResponseEntity<>(budgetItemResponse, HttpStatus.OK);
     }
 
     @PatchMapping(value = "/budget/items/{itemId}")
-    public ResponseEntity<?> updateBudgetItem(
+    public ResponseEntity<BudgetItemResponse> updateBudgetItem(
             @PathVariable(name = "itemId") int id,
             @Valid @RequestBody UpdateBudgetItemRequest updateBudgetItemRequest) {
         final BudgetItemResponse budgetItemResponse = budgetItemService.updateBudgetItem(id, updateBudgetItemRequest);
@@ -59,7 +59,7 @@ public class BudgetItemController {
     }
 
     @DeleteMapping(value = "/budget/items/{itemId}")
-    public ResponseEntity<?> deleteBudgetItem(@PathVariable(name = "itemId") int id) {
+    public ResponseEntity<HttpStatus> deleteBudgetItem(@PathVariable(name = "itemId") int id) {
         budgetItemService.deleteBudgetItem(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

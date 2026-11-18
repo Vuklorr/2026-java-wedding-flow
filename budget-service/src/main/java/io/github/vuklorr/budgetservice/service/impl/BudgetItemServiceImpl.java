@@ -9,7 +9,9 @@ import io.github.vuklorr.budgetservice.model.BudgetItem;
 import io.github.vuklorr.budgetservice.repository.BudgetItemRepository;
 import io.github.vuklorr.budgetservice.service.BudgetItemService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,7 +33,12 @@ public class BudgetItemServiceImpl implements BudgetItemService {
         BudgetItem budgetItem = new BudgetItem();
         budgetItem.setWeddingId(weddingId);
         budgetItem.setName(createBudgetItemRequest.name());
-        budgetItem.setPlannedAmount(createBudgetItemRequest.plannedAmount());
+        budgetItem.setPlannedAmount(
+                Objects.requireNonNullElse(
+                        createBudgetItemRequest.plannedAmount(),
+                        BigDecimal.ZERO
+                )
+        );
         budgetItem.setCurrencyCode(createBudgetItemRequest.currencyCode());
 
         return getBudgetResponse(budgetItemRepository.save(budgetItem));
@@ -53,14 +60,15 @@ public class BudgetItemServiceImpl implements BudgetItemService {
     }
 
     @Override
+    @Transactional
     public BudgetItemResponse updateBudgetItem(int id, UpdateBudgetItemRequest updateBudgetItemRequest) {
         BudgetItem budgetItem = budgetItemRepository.findById(id).orElseThrow(() -> new BudgetItemNotFoundException(id));
 
-        if (!Objects.isNull(updateBudgetItemRequest.name())) {
+        if (updateBudgetItemRequest.name() != null) {
             budgetItem.setName(updateBudgetItemRequest.name());
         }
 
-        if (!Objects.isNull(updateBudgetItemRequest.plannedAmount())) {
+        if (updateBudgetItemRequest.plannedAmount() != null) {
             budgetItem.setPlannedAmount(updateBudgetItemRequest.plannedAmount());
         }
 

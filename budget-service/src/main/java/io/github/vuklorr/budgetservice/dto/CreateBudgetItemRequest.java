@@ -1,5 +1,7 @@
 package io.github.vuklorr.budgetservice.dto;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
@@ -9,16 +11,15 @@ public record CreateBudgetItemRequest(
         @NotBlank(message = "Название объекта бюджета не может быть пустым")
         String name,
 
-        @Pattern(
-                regexp = "^.{1,15}\\.{0,2}$",
-                message = "Планируемая сумма не может быть пустой и имеет максимально 15 символов до точки и 2 символа после"
-        )
+        @DecimalMin(value = "0.00")
+        @Digits(integer = 13, fraction = 2)
         BigDecimal plannedAmount,
 
         @Pattern(
                 regexp = "[A-Z]{3}",
                 message = "Код курса валюты должен иметь 3 буквенных символа"
         )
+        @NotBlank
         String currencyCode
 ) {
 }

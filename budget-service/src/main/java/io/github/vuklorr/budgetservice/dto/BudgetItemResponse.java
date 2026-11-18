@@ -9,6 +9,6 @@ public record BudgetItemResponse (
    String name,
    BigDecimal plannedAmount,
    String currencyCode,
-   Instant createAt
+   Instant createdAt
 ) {
 }
