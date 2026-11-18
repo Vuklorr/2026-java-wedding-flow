@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -94,25 +93,31 @@ public class PaymentServiceImpl implements PaymentService {
                 createPaymentRequest
         ));
 
-        payment.setExchangeRateToItemCurrency(
-                Objects.requireNonNullElse(
-                        createPaymentRequest.exchangeRateToItemCurrency(),
-                        BigDecimal.ZERO
-                )
-        );
         return payment;
     }
 
-    private BigDecimal getExchangeRateToItemCurrency(String currencyCode, String budgetCurrencyCode, CreatePaymentRequest createPaymentRequest) {
-        BigDecimal exchangeRate = BigDecimal.ONE;
-        if (!currencyCode.equals(budgetCurrencyCode)) {
-            exchangeRate = createPaymentRequest.exchangeRateToItemCurrency();
+    private BigDecimal getExchangeRateToItemCurrency(
+            String currencyCode,
+            String budgetCurrencyCode,
+            CreatePaymentRequest request
+    ) {
+        BigDecimal exchangeRate = request.exchangeRateToItemCurrency();
 
-            if (exchangeRate == null) {
+        if (currencyCode.equals(budgetCurrencyCode)) {
+            if (exchangeRate != null
+                    && exchangeRate.compareTo(BigDecimal.ONE) != 0) {
                 throw new InvalidExchangeRateException(
-                        "Exchange rate is required for different currencies"
+                        "Exchange rate must be 1 for the same currency"
                 );
             }
+
+            return BigDecimal.ONE;
+        }
+
+        if (exchangeRate == null) {
+            throw new InvalidExchangeRateException(
+                    "Exchange rate is required for different currencies"
+            );
         }
 
         return exchangeRate;

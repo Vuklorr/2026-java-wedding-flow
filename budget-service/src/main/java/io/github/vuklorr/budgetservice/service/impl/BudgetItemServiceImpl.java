@@ -88,6 +88,7 @@ public class BudgetItemServiceImpl implements BudgetItemService {
     }
 
     @Override
+    @Transactional
     public void deleteBudgetItem(int id) {
         BudgetItem budgetItem = budgetItemRepository.findById(id).orElseThrow(() -> new BudgetItemNotFoundException(id));
 
