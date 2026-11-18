@@ -1,6 +1,7 @@
 package io.github.vuklorr.budgetservice.handler;
 
 import io.github.vuklorr.budgetservice.exception.BudgetItemNotFoundException;
+import io.github.vuklorr.budgetservice.exception.InvalidCurrencyCodeException;
 import io.github.vuklorr.budgetservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.budgetservice.exception.WeddingServiceUnavailableException;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,14 @@ public class GlobalExceptionBudgetHandler {
     public ProblemDetail handleWeddingServiceUnavailableException (WeddingServiceUnavailableException exception) {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.SERVICE_UNAVAILABLE,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(InvalidCurrencyCodeException.class)
+    public ProblemDetail handleCurrencyCodeIllegalException (InvalidCurrencyCodeException exception) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
                 exception.getMessage()
         );
     }

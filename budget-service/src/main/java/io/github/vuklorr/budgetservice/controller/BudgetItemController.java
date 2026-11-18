@@ -59,9 +59,9 @@ public class BudgetItemController {
     }
 
     @DeleteMapping(value = "/budget/items/{itemId}")
-    public ResponseEntity<HttpStatus> deleteBudgetItem(@PathVariable(name = "itemId") int id) {
+    public ResponseEntity<Void> deleteBudgetItem(@PathVariable(name = "itemId") int id) {
         budgetItemService.deleteBudgetItem(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

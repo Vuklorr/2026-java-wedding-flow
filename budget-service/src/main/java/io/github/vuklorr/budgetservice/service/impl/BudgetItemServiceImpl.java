@@ -5,6 +5,7 @@ import io.github.vuklorr.budgetservice.dto.BudgetItemResponse;
 import io.github.vuklorr.budgetservice.dto.CreateBudgetItemRequest;
 import io.github.vuklorr.budgetservice.dto.UpdateBudgetItemRequest;
 import io.github.vuklorr.budgetservice.exception.BudgetItemNotFoundException;
+import io.github.vuklorr.budgetservice.exception.InvalidCurrencyCodeException;
 import io.github.vuklorr.budgetservice.model.BudgetItem;
 import io.github.vuklorr.budgetservice.repository.BudgetItemRepository;
 import io.github.vuklorr.budgetservice.service.BudgetItemService;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,6 +30,14 @@ public class BudgetItemServiceImpl implements BudgetItemService {
 
     @Override
     public BudgetItemResponse createBudgetItem(CreateBudgetItemRequest createBudgetItemRequest, int weddingId) {
+        String currencyCode = createBudgetItemRequest.currencyCode();
+
+        try {
+            Currency.getInstance(currencyCode);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidCurrencyCodeException("Currency code is invalid");
+        }
+
         weddingClient.ensureWeddingExists(weddingId);
 
         BudgetItem budgetItem = new BudgetItem();
@@ -39,6 +49,7 @@ public class BudgetItemServiceImpl implements BudgetItemService {
                         BigDecimal.ZERO
                 )
         );
+
         budgetItem.setCurrencyCode(createBudgetItemRequest.currencyCode());
 
         return getBudgetResponse(budgetItemRepository.save(budgetItem));
@@ -46,6 +57,8 @@ public class BudgetItemServiceImpl implements BudgetItemService {
 
     @Override
     public List<BudgetItemResponse> readAllBudgetItemsByWeddingId(int weddingId) {
+        weddingClient.ensureWeddingExists(weddingId);
+
         return budgetItemRepository
                 .findByWeddingId(weddingId)
                 .stream()
