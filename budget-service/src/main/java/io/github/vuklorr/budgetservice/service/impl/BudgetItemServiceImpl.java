@@ -4,16 +4,17 @@ import io.github.vuklorr.budgetservice.client.WeddingClient;
 import io.github.vuklorr.budgetservice.dto.budgetitem.BudgetItemResponse;
 import io.github.vuklorr.budgetservice.dto.budgetitem.CreateBudgetItemRequest;
 import io.github.vuklorr.budgetservice.dto.budgetitem.UpdateBudgetItemRequest;
+import io.github.vuklorr.budgetservice.exception.BudgetItemHasPaymentsException;
 import io.github.vuklorr.budgetservice.exception.BudgetItemNotFoundException;
-import io.github.vuklorr.budgetservice.exception.InvalidCurrencyCodeException;
 import io.github.vuklorr.budgetservice.model.BudgetItem;
 import io.github.vuklorr.budgetservice.repository.BudgetItemRepository;
+import io.github.vuklorr.budgetservice.repository.PaymentRepository;
 import io.github.vuklorr.budgetservice.service.BudgetItemService;
+import io.github.vuklorr.budgetservice.validation.CurrencyValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,22 +23,19 @@ public class BudgetItemServiceImpl implements BudgetItemService {
 
     private final BudgetItemRepository budgetItemRepository;
     private final WeddingClient weddingClient;
+    private final PaymentRepository paymentRepository;
+    private final CurrencyValidator currencyValidator;
 
-    public BudgetItemServiceImpl(BudgetItemRepository budgetItemRepository, WeddingClient weddingClient) {
+    public BudgetItemServiceImpl(BudgetItemRepository budgetItemRepository, WeddingClient weddingClient, PaymentRepository paymentRepository, CurrencyValidator currencyValidator) {
         this.budgetItemRepository = budgetItemRepository;
         this.weddingClient = weddingClient;
+        this.paymentRepository = paymentRepository;
+        this.currencyValidator = currencyValidator;
     }
 
     @Override
     public BudgetItemResponse createBudgetItem(CreateBudgetItemRequest createBudgetItemRequest, int weddingId) {
-        String currencyCode = createBudgetItemRequest.currencyCode();
-
-        try {
-            Currency.getInstance(currencyCode);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidCurrencyCodeException("Currency code is invalid");
-        }
-
+        currencyValidator.validateCurrencyCode(createBudgetItemRequest.currencyCode());
         weddingClient.ensureWeddingExists(weddingId);
 
         BudgetItem budgetItem = new BudgetItem();
@@ -92,6 +90,11 @@ public class BudgetItemServiceImpl implements BudgetItemService {
     @Override
     public void deleteBudgetItem(int id) {
         BudgetItem budgetItem = budgetItemRepository.findById(id).orElseThrow(() -> new BudgetItemNotFoundException(id));
+
+        if (paymentRepository.existsByBudgetItemId(id)) {
+            throw new BudgetItemHasPaymentsException(id);
+        }
+
         budgetItemRepository.delete(budgetItem);
     }
 

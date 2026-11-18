@@ -1,7 +1,9 @@
 package io.github.vuklorr.budgetservice.handler;
 
+import io.github.vuklorr.budgetservice.exception.BudgetItemHasPaymentsException;
 import io.github.vuklorr.budgetservice.exception.BudgetItemNotFoundException;
 import io.github.vuklorr.budgetservice.exception.InvalidCurrencyCodeException;
+import io.github.vuklorr.budgetservice.exception.InvalidExchangeRateException;
 import io.github.vuklorr.budgetservice.exception.PaymentNotFoundException;
 import io.github.vuklorr.budgetservice.exception.WeddingNotFoundException;
 import io.github.vuklorr.budgetservice.exception.WeddingServiceUnavailableException;
@@ -84,6 +86,22 @@ public class GlobalExceptionBudgetServiceHandler {
     public ProblemDetail handlePaymentNotFound(PaymentNotFoundException exception) {
         return ProblemDetail.forStatusAndDetail(
                 HttpStatus.NOT_FOUND,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(InvalidExchangeRateException.class)
+    public ProblemDetail handleInvalidExchangeRateException(InvalidExchangeRateException exception) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(BudgetItemHasPaymentsException.class)
+    public ProblemDetail handleBudgetItemHasPaymentsException(BudgetItemHasPaymentsException exception) {
+        return ProblemDetail.forStatusAndDetail(
+                HttpStatus.CONFLICT,
                 exception.getMessage()
         );
     }

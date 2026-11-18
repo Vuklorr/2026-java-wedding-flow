@@ -3,12 +3,14 @@ package io.github.vuklorr.budgetservice.dto.payment;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.math.BigDecimal;
 
 public record CreatePaymentRequest(
-        @DecimalMin(value = "0.00")
+        @NotNull
+        @DecimalMin(value = "0", inclusive = false)
         @Digits(integer = 13, fraction = 2)
         BigDecimal amount,
 
@@ -19,7 +21,7 @@ public record CreatePaymentRequest(
         @NotBlank
         String currencyCode,
 
-        @DecimalMin(value = "0.00")
+        @DecimalMin(value = "0", inclusive = false)
         @Digits(integer = 10, fraction = 10)
         BigDecimal exchangeRateToItemCurrency
 ) {
