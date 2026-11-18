@@ -1,8 +1,8 @@
 package io.github.vuklorr.budgetservice.service;
 
-import io.github.vuklorr.budgetservice.dto.BudgetItemResponse;
-import io.github.vuklorr.budgetservice.dto.CreateBudgetItemRequest;
-import io.github.vuklorr.budgetservice.dto.UpdateBudgetItemRequest;
+import io.github.vuklorr.budgetservice.dto.budgetitem.BudgetItemResponse;
+import io.github.vuklorr.budgetservice.dto.budgetitem.CreateBudgetItemRequest;
+import io.github.vuklorr.budgetservice.dto.budgetitem.UpdateBudgetItemRequest;
 
 import java.util.List;
 

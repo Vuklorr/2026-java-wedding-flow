@@ -1,9 +1,9 @@
 package io.github.vuklorr.budgetservice.service.impl;
 
 import io.github.vuklorr.budgetservice.client.WeddingClient;
-import io.github.vuklorr.budgetservice.dto.BudgetItemResponse;
-import io.github.vuklorr.budgetservice.dto.CreateBudgetItemRequest;
-import io.github.vuklorr.budgetservice.dto.UpdateBudgetItemRequest;
+import io.github.vuklorr.budgetservice.dto.budgetitem.BudgetItemResponse;
+import io.github.vuklorr.budgetservice.dto.budgetitem.CreateBudgetItemRequest;
+import io.github.vuklorr.budgetservice.dto.budgetitem.UpdateBudgetItemRequest;
 import io.github.vuklorr.budgetservice.exception.BudgetItemNotFoundException;
 import io.github.vuklorr.budgetservice.exception.InvalidCurrencyCodeException;
 import io.github.vuklorr.budgetservice.model.BudgetItem;
