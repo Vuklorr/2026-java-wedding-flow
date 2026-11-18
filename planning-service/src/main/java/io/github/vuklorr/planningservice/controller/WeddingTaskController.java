@@ -58,7 +58,7 @@ public class WeddingTaskController {
     }
 
     @DeleteMapping(value = "/tasks/{id}")
-    public ResponseEntity<?> deleteWedding(@PathVariable(name = "id") int id) {
+    public ResponseEntity<?> deleteWeddingTask(@PathVariable(name = "id") int id) {
         weddingTaskService.deleteWeddingTask(id);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

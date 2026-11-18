@@ -22,6 +22,19 @@ services:
       - "127.0.0.1:56001:5432"
     volumes:
       - planning_data:/var/lib/postgresql/data
+
+  db_budget:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_BUDGET_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_BUDGET_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_BUDGET_DB}
+    ports:
+      - "127.0.0.1:56002:5432"
+    volumes:
+      - budget_data:/var/lib/postgresql/data
 volumes:
   wedding_data:
   planning_data:
+  budget_data:
