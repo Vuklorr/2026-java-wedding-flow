@@ -1,4 +1,4 @@
-package io.github.vuklorr.budgetservice.dto;
+package io.github.vuklorr.budgetservice.dto.budgetitem;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
