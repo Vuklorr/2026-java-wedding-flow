@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -36,6 +37,7 @@ class PaymentRepositoryTest {
     @Autowired BudgetItemRepository items;
     @Autowired PaymentRepository payments;
     @Autowired EntityManager entityManager;
+    @Autowired JdbcTemplate jdbcTemplate;
 
     @Test
     void paymentShouldPersistAssociationAndGeneratePaymentDate() {
@@ -101,11 +103,23 @@ class PaymentRepositoryTest {
     @Test
     void deletingItemWithPaymentShouldBeBlockedByForeignKey() {
         BudgetItem item = items.saveAndFlush(item(5, "RUB"));
-        payments.saveAndFlush(payment(item, "10.00", "RUB", "1"));
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            items.delete(item);
-            items.flush();
-        });
+
+        payments.saveAndFlush(
+                payment(item, "10.00", "RUB", "1")
+        );
+
+        Integer itemId = item.getId();
+
+        entityManager.flush();
+        entityManager.clear();
+
+        assertThrows(
+                DataIntegrityViolationException.class,
+                () -> jdbcTemplate.update(
+                        "DELETE FROM budget_item WHERE id = ?",
+                        itemId
+                )
+        );
     }
 
     @Test
