@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:56002/budget_db
+    url: jdbc:postgresql://localhost:${POSTGRES_BUDGET_PORT}/${POSTGRES_BUDGET_DB}
     username: ${POSTGRES_BUDGET_USER}
     password: ${POSTGRES_BUDGET_PASSWORD}
 

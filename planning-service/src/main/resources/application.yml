@@ -4,7 +4,7 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:56001/planning_db
+    url: jdbc:postgresql://localhost:${POSTGRES_PLANNING_PORT}/${POSTGRES_PLANNING_DB}
     username: ${POSTGRES_PLANNING_USER}
     password: ${POSTGRES_PLANNING_PASSWORD}
 
