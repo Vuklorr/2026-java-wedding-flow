@@ -1,4 +1,4 @@
-package io.github.vuklorr.budgetservice.dto;
+package io.github.vuklorr.budgetservice.dto.budgetitem;
 
 import java.math.BigDecimal;
 import java.time.Instant;
