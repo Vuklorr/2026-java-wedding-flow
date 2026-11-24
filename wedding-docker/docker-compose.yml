@@ -34,7 +34,20 @@ services:
       - "127.0.0.1:56002:5432"
     volumes:
       - budget_data:/var/lib/postgresql/data
+
+  db_notification:
+    image: postgres:17
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_NOTIFICATION_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_NOTIFICATION_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_NOTIFICATION_DB}
+    ports:
+      - "127.0.0.1:56003:5432"
+    volumes:
+      - notification_data:/var/lib/postgresql/data
 volumes:
   wedding_data:
   planning_data:
   budget_data:
+  notification_data:

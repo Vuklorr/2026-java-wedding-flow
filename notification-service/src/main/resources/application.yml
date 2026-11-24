@@ -1,0 +1,14 @@
+server:
+  port: 8085
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:56003/notification_db
+    username: ${POSTGRES_NOTIFICATION_USER}
+    password: ${POSTGRES_NOTIFICATION_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+

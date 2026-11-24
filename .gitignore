@@ -7,3 +7,5 @@ wedding-docker/.env
 /wedding-service/wedding-service.iml
 /planning-service/planning-service.iml
 /budget-service/budget-service.iml
+/notification-service/notification-service.iml
+/notification-service/target/
