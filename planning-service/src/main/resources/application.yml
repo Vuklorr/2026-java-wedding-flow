@@ -7,7 +7,18 @@ spring:
     url: jdbc:postgresql://localhost:${POSTGRES_PLANNING_PORT}/${POSTGRES_PLANNING_DB}
     username: ${POSTGRES_PLANNING_USER}
     password: ${POSTGRES_PLANNING_PASSWORD}
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: StringSerializer
+      value-serializer: JacksonJsonSerializer
+      acks: all
+      properties:
+        enable:
+          idempotence: true
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
   jpa:
     hibernate:
       ddl-auto: validate

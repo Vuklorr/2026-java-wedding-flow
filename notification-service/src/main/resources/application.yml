@@ -7,6 +7,11 @@ spring:
     url: jdbc:postgresql://localhost:${POSTGRES_NOTIFICATION_PORT}/${POSTGRES_NOTIFICATION_DB}
     username: ${POSTGRES_NOTIFICATION_USER}
     password: ${POSTGRES_NOTIFICATION_PASSWORD}
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
 
   jpa:
     hibernate:
