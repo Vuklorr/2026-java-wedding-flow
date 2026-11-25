@@ -31,21 +31,23 @@ public class Notification {
     @Column(name = "id", nullable = false)
     private  Long id;
 
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "event_id", nullable = false)
+    @Column(name = "event_id", nullable = false, unique = true)
     private UUID eventId;
 
     @Column(name = "wedding_id", nullable = false)
     private int weddingId;
 
-    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false, length = 50)
     private NotificationType type;
+
+    @Column(name = "title", nullable = false, length = 150)
+    private String title;
 
     @Column(name = "message", nullable = false)
     private String message;
 
-    @Generated(event = {EventType.INSERT, EventType.UPDATE})
+    @Generated(event = EventType.INSERT)
     @Column(
             name = "created_at",
             nullable = false,
@@ -54,12 +56,7 @@ public class Notification {
     )
     private Instant createdAt;
 
-    @Generated(event = {EventType.INSERT, EventType.UPDATE})
-    @Column(
-            name = "read_at",
-            insertable = false,
-            updatable = false
-    )
+    @Column(name = "read_at")
     private Instant readAt;
 
 }
