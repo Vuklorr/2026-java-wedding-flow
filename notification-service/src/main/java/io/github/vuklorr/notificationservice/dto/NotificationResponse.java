@@ -12,7 +12,7 @@ public record NotificationResponse(
     NotificationType type,
     String title,
     String message,
-    Instant createAt,
+    Instant createdAt,
     Instant readAt,
     Boolean isRead
 ) {
