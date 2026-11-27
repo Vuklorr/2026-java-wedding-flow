@@ -31,6 +31,7 @@
         <module>budget-service</module>
         <module>wedding-service</module>
         <module>planning-service</module>
+        <module>notification-service</module>
     </modules>
 
     <dependencyManagement>

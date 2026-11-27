@@ -4,10 +4,18 @@ server:
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:56001/planning_db
+    url: jdbc:postgresql://localhost:${POSTGRES_PLANNING_PORT}/${POSTGRES_PLANNING_DB}
     username: ${POSTGRES_PLANNING_USER}
     password: ${POSTGRES_PLANNING_PASSWORD}
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+      acks: all
+      properties:
+        "[enable.idempotence]": true
+        "[spring.json.add.type.headers]": false
   jpa:
     hibernate:
       ddl-auto: validate
