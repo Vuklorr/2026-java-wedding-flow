@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlanningEventProducer {
 
-    private final static String NAME_PLANNING_TOPIC = "planning.events";
+    private static final String PLANNING_TOPIC = "planning.events";
 
     private final KafkaTemplate<String, TaskCreatedEvent> kafkaTemplate;
 
@@ -18,7 +18,7 @@ public class PlanningEventProducer {
     }
 
     public void publishTaskCreated(TaskCreatedEvent event) {
-        kafkaTemplate.send(NAME_PLANNING_TOPIC, String.valueOf(event.weddingId()), event)
+        kafkaTemplate.send(PLANNING_TOPIC, String.valueOf(event.weddingId()), event)
                 .whenComplete((result, exception) -> {
                     if (exception != null) {
                         log.error(

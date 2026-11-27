@@ -10,15 +10,12 @@ spring:
   kafka:
     bootstrap-servers: localhost:9092
     producer:
-      key-serializer: StringSerializer
-      value-serializer: JacksonJsonSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
       acks: all
       properties:
-        enable:
-          idempotence: true
-    consumer:
-      group-id: notification-service
-      auto-offset-reset: earliest
+        "[enable.idempotence]": true
+        "[spring.json.add.type.headers]": false
   jpa:
     hibernate:
       ddl-auto: validate

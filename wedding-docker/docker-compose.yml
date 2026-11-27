@@ -86,4 +86,3 @@ volumes:
   budget_data:
   notification_data:
   kafka_data:
-  kafbat_data:
